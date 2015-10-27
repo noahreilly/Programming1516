@@ -40,6 +40,8 @@ public class MazeSolver {
 	private LinkedHashSet<Integer> checkedLocations;
 	private LinkedHashSet<Integer> uncheckedLocations;
 	private MazePanel mazePanel;
+	private int start;
+	private int end;
 
 	public MazeSolver( int[][] maze ) {
 		this.maze = maze;
@@ -54,8 +56,9 @@ public class MazeSolver {
 	public void solve( int startingLocation, int endingLocation ) {
 		initialize();
 		uncheckedLocations = openLocations;
-		uncheckedLocations.add( endingLocation );
 		checkedLocations = new LinkedHashSet<Integer>();
+		start = startingLocation;
+		end = endingLocation;
 		findPath( startingLocation, 0 );
 	}
 
@@ -66,14 +69,16 @@ public class MazeSolver {
 		uncheckedLocations.remove( location );
 		checkedLocations.add( location );
 		for( int x : surroundingLocations ) {
-			if( isEnd( location ) ) {
-				modifyLocation( location / maze.length, location % maze.length,
-				        FINAL_PATH );
+			if( x == end ) {
 				return true;
 			}
+			if( x != start )
+			modifyLocation( location / maze.length, location
+			        % maze.length, DEAD_END_FILL );
 			if( findPath( x, locVal + 1 ) ) {
-				modifyLocation( location / maze.length, location % maze.length,
-				        FINAL_PATH );
+				if( x != start )
+					modifyLocation( location / maze.length, location
+					        % maze.length, FINAL_PATH );
 				return true;
 			}
 		}
@@ -86,37 +91,41 @@ public class MazeSolver {
 		int y = loc % maze.length;
 		int down = ( ( x + 1 ) * maze.length ) + y;
 		if( uncheckedLocations.contains( down ) && !isWall( x + 1, y ) ) {
-			modifyLocation( x + 1, y, DEAD_END_FILL );
 			temp.add( down );
 		} else if( isEnd( down ) ) {
+			temp.clear();
 			temp.add( down );
+			return temp;
 		}
 		int up = ( ( x - 1 ) * maze.length ) + y;
 		if( uncheckedLocations.contains( up ) && !isWall( x - 1, y ) ) {
-			modifyLocation( x - 1, y, DEAD_END_FILL );
 			temp.add( up );
 		} else if( isEnd( up ) ) {
+			temp.clear();
 			temp.add( up );
+			return temp;
 		}
 		int right = ( x * maze.length ) + ( y + 1 );
 		if( uncheckedLocations.contains( right ) && !isWall( x, y + 1 ) ) {
-			modifyLocation( x, y + 1, DEAD_END_FILL );
 			temp.add( right );
 		} else if( isEnd( right ) ) {
+			temp.clear();
 			temp.add( right );
+			return temp;
 		}
 		int left = ( x * maze.length ) + ( y - 1 );
 		if( uncheckedLocations.contains( left ) && !isWall( x, y - 1 ) ) {
-			modifyLocation( x, y - 1, DEAD_END_FILL );
 			temp.add( left );
 		} else if( isEnd( left ) ) {
+			temp.clear();
 			temp.add( left );
+			return temp;
 		}
 		return temp;
 	}
 
 	public boolean isEnd( int location ) {
-		if( maze[location % maze.length][location / maze.length] == EXIT ) {
+		if( location == end ) {
 			return true;
 		}
 		return false;
