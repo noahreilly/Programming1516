@@ -7,37 +7,41 @@ import java.util.concurrent.TimeUnit;
 public class MazeSolver {
 
 	/**
-	 * Location assignment locVal = ( x * length ) + y 
-	 * y = locVal % length 
-	 * x = locVal / length
+	 * Location assignment locVal = ( x * length ) + y y = locVal % length x =
+	 * locVal / length
 	 */
 	// MAZE
 	private int[][] maze;
 	private LinkedHashSet<Integer> openLocations;
 	private LinkedHashSet<Integer> filledLocations;
 
+	// PAUSE TIME
+	private final int TIME = 5;
+
 	// LOCATION VALUES
 	private final int OPEN_LOCATION = 3;
 	private final int DEAD_END_FILL = 1;
 	private final int CLOSED_LOCATION = 2;
 	private final int FINAL_PATH = 6;
-
-	// DEAD END ALGORITH
-	private LinkedHashSet<Integer> deadEnds;
-	private boolean flag;
-	
-	// A*
-	private HashMap<Integer/*location */, Integer/*H value*/> locationValues;
-	private LinkedHashSet<Integer> checkedLocations;
-	private LinkedHashSet<Integer> uncheckedLocations;
+	private final int EXIT = 5;
 
 	// SIZE OF THE FRAME
 	private final int FRAME_WIDTH = 1000;
 	private final int FRAME_HEIGHT = 750;
 	private MazeFrame mazeFrame;
+
+	// DEAD END ALGORITHM
+	private LinkedHashSet<Integer> deadEnds;
+	private boolean flag;
+
+	// NOT OMNIPOTENT
+	// private HashMap<Integer/* location */, Integer/* H value */>
+	// locationValues;
+	private LinkedHashSet<Integer> checkedLocations;
+	private LinkedHashSet<Integer> uncheckedLocations;
 	private MazePanel mazePanel;
 
-	public MazeSolver(int[][] maze) {
+	public MazeSolver( int[][] maze ) {
 		this.maze = maze;
 		openLocations = new LinkedHashSet<Integer>();
 		filledLocations = new LinkedHashSet<Integer>();
@@ -46,29 +50,76 @@ public class MazeSolver {
 		printMaze();
 	}
 
-	// Solve using A*
-	public void solve(int startingLocation) {
+	// Solve when not omnipotent
+	public void solve( int startingLocation, int endingLocation ) {
 		initialize();
 		uncheckedLocations = openLocations;
-		findPath( startingLocation );
+		uncheckedLocations.add( endingLocation );
+		checkedLocations = new LinkedHashSet<Integer>();
+		findPath( startingLocation, 0 );
 	}
 
-	public void findPath(int location) {
-		LinkedHashSet<Integer> surroundingLocations = openLocations( location );
+	public boolean findPath( int location, int locVal ) {
+		pause();
+		LinkedHashSet<Integer> surroundingLocations = openLocations( location,
+		        locVal );
+		uncheckedLocations.remove( location );
+		checkedLocations.add( location );
 		for( int x : surroundingLocations ) {
-			findPath( x );
-		} 
+			if( isEnd( location ) ) {
+				modifyLocation( location / maze.length, location % maze.length,
+				        FINAL_PATH );
+				return true;
+			}
+			if( findPath( x, locVal + 1 ) ) {
+				modifyLocation( location / maze.length, location % maze.length,
+				        FINAL_PATH );
+				return true;
+			}
+		}
+		return false;
 	}
 
-	public LinkedHashSet<Integer> openLocations(int loc) {
+	public LinkedHashSet<Integer> openLocations( int loc, int locVal ) {
 		LinkedHashSet<Integer> temp = new LinkedHashSet<Integer>();
 		int x = loc / maze.length;
 		int y = loc % maze.length;
-		// TODO check open surrounding locations
-		if( true ) {
-
+		int down = ( ( x + 1 ) * maze.length ) + y;
+		if( uncheckedLocations.contains( down ) && !isWall( x + 1, y ) ) {
+			modifyLocation( x + 1, y, DEAD_END_FILL );
+			temp.add( down );
+		} else if( isEnd( down ) ) {
+			temp.add( down );
+		}
+		int up = ( ( x - 1 ) * maze.length ) + y;
+		if( uncheckedLocations.contains( up ) && !isWall( x - 1, y ) ) {
+			modifyLocation( x - 1, y, DEAD_END_FILL );
+			temp.add( up );
+		} else if( isEnd( up ) ) {
+			temp.add( up );
+		}
+		int right = ( x * maze.length ) + ( y + 1 );
+		if( uncheckedLocations.contains( right ) && !isWall( x, y + 1 ) ) {
+			modifyLocation( x, y + 1, DEAD_END_FILL );
+			temp.add( right );
+		} else if( isEnd( right ) ) {
+			temp.add( right );
+		}
+		int left = ( x * maze.length ) + ( y - 1 );
+		if( uncheckedLocations.contains( left ) && !isWall( x, y - 1 ) ) {
+			modifyLocation( x, y - 1, DEAD_END_FILL );
+			temp.add( left );
+		} else if( isEnd( left ) ) {
+			temp.add( left );
 		}
 		return temp;
+	}
+
+	public boolean isEnd( int location ) {
+		if( maze[location % maze.length][location / maze.length] == EXIT ) {
+			return true;
+		}
+		return false;
 	}
 
 	// Solve using the fill dead end method
@@ -100,12 +151,8 @@ public class MazeSolver {
 		}
 	}
 
-	public void fillDeadEnd(int x, int y) {
-		try {
-			TimeUnit.MILLISECONDS.sleep( 5 );
-		} catch( InterruptedException e ) {
-			e.printStackTrace();
-		}
+	public void fillDeadEnd( int x, int y ) {
+		pause();
 		openLocations.remove( ( x * maze.length ) + y );
 		maze[y][x] = DEAD_END_FILL;
 		modifyLocation( x, y, DEAD_END_FILL );
@@ -117,7 +164,7 @@ public class MazeSolver {
 		}
 	}
 
-	public boolean isDeadEnd(int l) {
+	public boolean isDeadEnd( int l ) {
 		int x = l / maze.length;
 		int y = l % maze.length;
 		int surroundingWalls = 0;
@@ -139,7 +186,7 @@ public class MazeSolver {
 		return false;
 	}
 
-	public boolean isDeadEnd(int x, int y) {
+	public boolean isDeadEnd( int x, int y ) {
 		int surroundingWalls = 0;
 		if( maze[y][x + 1] <= CLOSED_LOCATION ) {
 			surroundingWalls++;
@@ -172,7 +219,7 @@ public class MazeSolver {
 		}
 	}
 
-	public boolean isWall(int x, int y) {
+	public boolean isWall( int x, int y ) {
 		return maze[y][x] != OPEN_LOCATION;
 	}
 
@@ -185,8 +232,16 @@ public class MazeSolver {
 		mazeFrame.setVisible( true );
 	}
 
-	public void modifyLocation(int x, int y, int val) {
+	public void modifyLocation( int x, int y, int val ) {
 		mazePanel.modifyLocation( x, y, val );
+	}
+
+	public void pause() {
+		try {
+			TimeUnit.MILLISECONDS.sleep( TIME );
+		} catch( InterruptedException e ) {
+			e.printStackTrace();
+		}
 	}
 
 }

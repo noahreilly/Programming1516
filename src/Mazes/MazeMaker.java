@@ -18,12 +18,13 @@ public class MazeMaker {
 	private final int ORIGIN = 2;
 	private final int ENTRANCE = 4;
 	private final int EXIT = 5;
+	
+	private int beginning;
+	private int end;
 
-	private final int TIME = 500;
+	private final int TIME = 5;
 
 	private MazeSolver solver;
-	
-	private Timer timer;
 
 	public MazeMaker(int rows, int cols) {
 		directions = new Direction[4];
@@ -31,6 +32,9 @@ public class MazeMaker {
 		directions[1] = Direction.DOWN;
 		directions[2] = Direction.RIGHT;
 		directions[3] = Direction.LEFT;
+		
+		beginning = 0;
+		end = 0;
 
 		maze = new int[rows][cols];
 
@@ -39,7 +43,8 @@ public class MazeMaker {
 		fillMaze( rows, cols );
 		makePath();
 		makeEntranceAndExit();
-		solver.solveDeadEnd();
+//		solver.solveDeadEnd();
+		solver.solve( beginning, end );
 	}
 
 	public void fillMaze(int rows, int cols) {
@@ -58,12 +63,14 @@ public class MazeMaker {
 			y = ( int )( Math.random() * maze.length );
 		}
 		maze[y][x] = ENTRANCE;
+		beginning = ( x * maze.length ) + y;
 		solver.modifyLocation( x, y, ENTRANCE );
 		while( !canBeEntranceExit( x, y ) ) {
 			x = ( int )( Math.random() * maze[0].length );
 			y = ( int )( Math.random() * maze.length );
 		}
 		maze[y][x] = EXIT;
+		end = ( x * maze.length ) + y;
 		solver.modifyLocation( x, y, EXIT );
 	}
 
@@ -81,11 +88,11 @@ public class MazeMaker {
 			checkedSpots.add( directions[( int )( Math.random() * 4 )] );
 		}
 		for( Direction dir : checkedSpots ) {
-			try {
-		        TimeUnit.MILLISECONDS.sleep(5);
-	        } catch( InterruptedException e ) {
-		        e.printStackTrace();
-	        }
+//			try {
+//		        TimeUnit.MILLISECONDS.sleep(TIME);
+//	        } catch( InterruptedException e ) {
+//		        e.printStackTrace();
+//	        }
 			switch ( dir ){
 				case UP:
 					if( check( x, y - 1, dir ) ) {
