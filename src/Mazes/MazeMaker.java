@@ -18,21 +18,21 @@ public class MazeMaker {
 	private final int ORIGIN = 2;
 	private final int ENTRANCE = 4;
 	private final int EXIT = 5;
-	
+
 	private int beginning;
 	private int end;
 
-	private final int TIME = 5;
+	private final int TIME = 3;
 
 	private MazeSolver solver;
 
-	public MazeMaker(int rows, int cols) {
+	public MazeMaker( int rows, int cols ) {
 		directions = new Direction[4];
 		directions[0] = Direction.UP;
 		directions[1] = Direction.DOWN;
 		directions[2] = Direction.RIGHT;
 		directions[3] = Direction.LEFT;
-		
+
 		beginning = 0;
 		end = 0;
 
@@ -43,11 +43,12 @@ public class MazeMaker {
 		fillMaze( rows, cols );
 		makePath();
 		makeEntranceAndExit();
-//		solver.solveDeadEnd();
+		// solver.solveDeadEnd();
 		solver.solve( beginning, end );
 	}
 
-	public void fillMaze(int rows, int cols) {
+	// PRIMS ALGORITHM
+	public void fillMaze( int rows, int cols ) {
 		for( int[] x : maze ) {
 			for( int y : x ) {
 				y = CLOSED_LOCATION;
@@ -82,17 +83,17 @@ public class MazeMaker {
 		makePath( x, y );
 	}
 
-	public void makePath(int x, int y) {
+	public void makePath( int x, int y ) {
 		LinkedHashSet<Direction> checkedSpots = new LinkedHashSet<Direction>();
 		while( checkedSpots.size() < 4 ) {
 			checkedSpots.add( directions[( int )( Math.random() * 4 )] );
 		}
 		for( Direction dir : checkedSpots ) {
-//			try {
-//		        TimeUnit.MILLISECONDS.sleep(TIME);
-//	        } catch( InterruptedException e ) {
-//		        e.printStackTrace();
-//	        }
+			// try {
+			// TimeUnit.MILLISECONDS.sleep( TIME );
+			// } catch( InterruptedException e ) {
+			// e.printStackTrace();
+			// }
 			switch ( dir ){
 				case UP:
 					if( check( x, y - 1, dir ) ) {
@@ -150,7 +151,7 @@ public class MazeMaker {
 		}
 	}
 
-	public boolean check(int x, int y, Direction direction) {
+	public boolean check( int x, int y, Direction direction ) {
 		if( x < 0 || x >= maze.length ) {
 			return false;
 		}
@@ -169,7 +170,7 @@ public class MazeMaker {
 		return true;
 	}
 
-	public boolean isEdge(int x, int y) {
+	public boolean isEdge( int x, int y ) {
 		if( x == 0 ) {
 			return true;
 		}
@@ -185,11 +186,11 @@ public class MazeMaker {
 		return false;
 	}
 
-	public boolean isWall(int x, int y) {
+	public boolean isWall( int x, int y ) {
 		return maze[y][x] == CLOSED_LOCATION;
 	}
 
-	public boolean canModify(int x, int y, Direction direction) {
+	public boolean canModify( int x, int y, Direction direction ) {
 		if( !isWall( x, y - 1 ) && direction != Direction.DOWN ) {
 			return false;
 		}
@@ -205,7 +206,7 @@ public class MazeMaker {
 		return true;
 	}
 
-	public boolean canBeEntranceExit(int x, int y) {
+	public boolean canBeEntranceExit( int x, int y ) {
 		if( !isEdge( x, y ) || !isWall( x, y ) ) {
 			return false;
 		}
