@@ -1,11 +1,7 @@
 package Mazes;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.LinkedHashSet;
 import java.util.concurrent.TimeUnit;
-
-import javax.swing.Timer;
 
 public class MazeMaker {
 
@@ -48,6 +44,7 @@ public class MazeMaker {
 	}
 
 	// PRIMS ALGORITHM
+	@SuppressWarnings("unused")
 	public void fillMaze( int rows, int cols ) {
 		for( int[] x : maze ) {
 			for( int y : x ) {
@@ -89,11 +86,7 @@ public class MazeMaker {
 			checkedSpots.add( directions[( int )( Math.random() * 4 )] );
 		}
 		for( Direction dir : checkedSpots ) {
-			// try {
-			// TimeUnit.MILLISECONDS.sleep( TIME );
-			// } catch( InterruptedException e ) {
-			// e.printStackTrace();
-			// }
+			pause();
 			switch ( dir ){
 				case UP:
 					if( check( x, y - 1, dir ) ) {
@@ -231,6 +224,14 @@ public class MazeMaker {
 			}
 		}
 		return true;
+	}
+	
+	public void pause() {
+		try {
+			TimeUnit.MILLISECONDS.sleep( TIME );
+		} catch( InterruptedException e ) {
+			e.printStackTrace();
+		}
 	}
 
 	private enum Direction {

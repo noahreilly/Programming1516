@@ -5,6 +5,8 @@ import java.awt.Color;
 import javax.swing.JLabel;
 
 public class MazeLocation extends JLabel {
+	
+	private static final long serialVersionUID = -3664751868994244117L;
 
 	public MazeLocation(int color) {
 		super();

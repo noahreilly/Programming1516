@@ -26,8 +26,7 @@ public class MazeSolver {
 	private final int CLOSED_LOCATION = 2;
 	private final int FINAL_PATH = 6;
 	private final int ENTRANCE = 4;
-	private final int EXIT = 5;
-
+	
 	// SIZE OF THE FRAME
 	private final int FRAME_WIDTH = 1000;
 	private final int FRAME_HEIGHT = 750;

@@ -6,7 +6,9 @@ import java.awt.GridLayout;
 import javax.swing.JPanel;
 
 public class MazePanel extends JPanel{
-
+	
+	private static final long serialVersionUID = 2305073624013720425L;
+	
 	private int [][] maze;
 	private MazeLocation[][] mazeLabels;
 	
