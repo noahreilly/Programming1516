@@ -157,11 +157,11 @@ org.eclipse.jdt.core.formatter.insert_space_after_opening_bracket_in_array_refer
 org.eclipse.jdt.core.formatter.insert_space_after_opening_paren_in_annotation=do not insert
 org.eclipse.jdt.core.formatter.insert_space_after_opening_paren_in_cast=insert
 org.eclipse.jdt.core.formatter.insert_space_after_opening_paren_in_catch=insert
-org.eclipse.jdt.core.formatter.insert_space_after_opening_paren_in_constructor_declaration=do not insert
+org.eclipse.jdt.core.formatter.insert_space_after_opening_paren_in_constructor_declaration=insert
 org.eclipse.jdt.core.formatter.insert_space_after_opening_paren_in_enum_constant=do not insert
 org.eclipse.jdt.core.formatter.insert_space_after_opening_paren_in_for=insert
 org.eclipse.jdt.core.formatter.insert_space_after_opening_paren_in_if=insert
-org.eclipse.jdt.core.formatter.insert_space_after_opening_paren_in_method_declaration=do not insert
+org.eclipse.jdt.core.formatter.insert_space_after_opening_paren_in_method_declaration=insert
 org.eclipse.jdt.core.formatter.insert_space_after_opening_paren_in_method_invocation=insert
 org.eclipse.jdt.core.formatter.insert_space_after_opening_paren_in_parenthesized_expression=insert
 org.eclipse.jdt.core.formatter.insert_space_after_opening_paren_in_switch=insert
@@ -188,11 +188,11 @@ org.eclipse.jdt.core.formatter.insert_space_before_closing_bracket_in_array_refe
 org.eclipse.jdt.core.formatter.insert_space_before_closing_paren_in_annotation=do not insert
 org.eclipse.jdt.core.formatter.insert_space_before_closing_paren_in_cast=insert
 org.eclipse.jdt.core.formatter.insert_space_before_closing_paren_in_catch=insert
-org.eclipse.jdt.core.formatter.insert_space_before_closing_paren_in_constructor_declaration=do not insert
+org.eclipse.jdt.core.formatter.insert_space_before_closing_paren_in_constructor_declaration=insert
 org.eclipse.jdt.core.formatter.insert_space_before_closing_paren_in_enum_constant=do not insert
 org.eclipse.jdt.core.formatter.insert_space_before_closing_paren_in_for=insert
 org.eclipse.jdt.core.formatter.insert_space_before_closing_paren_in_if=insert
-org.eclipse.jdt.core.formatter.insert_space_before_closing_paren_in_method_declaration=do not insert
+org.eclipse.jdt.core.formatter.insert_space_before_closing_paren_in_method_declaration=insert
 org.eclipse.jdt.core.formatter.insert_space_before_closing_paren_in_method_invocation=insert
 org.eclipse.jdt.core.formatter.insert_space_before_closing_paren_in_parenthesized_expression=insert
 org.eclipse.jdt.core.formatter.insert_space_before_closing_paren_in_switch=insert
