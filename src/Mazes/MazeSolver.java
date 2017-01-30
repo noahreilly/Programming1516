@@ -55,7 +55,10 @@ public class MazeSolver {
 		printMaze();
 	}
 
-	// Solve using right hand rule
+	/*
+	 *  Solve using right hand rule
+	 *  needs to know beginning and ending locations
+	 */	
 	public void solve( int startingLocation, int endingLocation ) {
 		initialize();
 		uncheckedLocations = openLocations;
