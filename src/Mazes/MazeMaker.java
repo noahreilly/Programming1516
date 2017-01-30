@@ -10,7 +10,7 @@ public class MazeMaker {
 	private Direction[] directions;
 
 	private final int OPEN_LOCATION = 3;
-	private final int CLOSED_LOCATION = 0;
+	private final int WALL = 0;
 	private final int ORIGIN = 2;
 	private final int ENTRANCE = 4;
 	private final int EXIT = 5;
@@ -36,7 +36,7 @@ public class MazeMaker {
 
 		solver = new MazeSolver( maze );
 
-		fillMaze( rows, cols );
+		fillMaze();
 		makePath();
 		makeEntranceAndExit();
 		// solver.solveDeadEnd();
@@ -45,15 +45,15 @@ public class MazeMaker {
 
 	// PRIMS ALGORITHM
 	@SuppressWarnings("unused")
-	public void fillMaze( int rows, int cols ) {
+	public void fillMaze() {
 		for( int[] x : maze ) {
 			for( int y : x ) {
-				y = CLOSED_LOCATION;
+				y = WALL;
 			}
 		}
 	}
 
-	public void makeEntranceAndExit() {
+	private void makeEntranceAndExit() {
 		int x = ( int )( Math.random() * maze[0].length );
 		int y = ( int )( Math.random() * maze.length );
 		while( !canBeEntranceExit( x, y ) ) {
@@ -80,7 +80,7 @@ public class MazeMaker {
 		makePath( x, y );
 	}
 
-	public void makePath( int x, int y ) {
+	private void makePath( int x, int y ) {
 		LinkedHashSet<Direction> checkedSpots = new LinkedHashSet<Direction>();
 		while( checkedSpots.size() < 4 ) {
 			checkedSpots.add( directions[( int )( Math.random() * 4 )] );
@@ -144,7 +144,7 @@ public class MazeMaker {
 		}
 	}
 
-	public boolean check( int x, int y, Direction direction ) {
+	private boolean check( int x, int y, Direction direction ) {
 		if( x < 0 || x >= maze.length ) {
 			return false;
 		}
@@ -163,7 +163,7 @@ public class MazeMaker {
 		return true;
 	}
 
-	public boolean isEdge( int x, int y ) {
+	private boolean isEdge( int x, int y ) {
 		if( x == 0 ) {
 			return true;
 		}
@@ -179,11 +179,11 @@ public class MazeMaker {
 		return false;
 	}
 
-	public boolean isWall( int x, int y ) {
-		return maze[y][x] == CLOSED_LOCATION;
+	private boolean isWall( int x, int y ) {
+		return maze[y][x] == WALL;
 	}
 
-	public boolean canModify( int x, int y, Direction direction ) {
+	private boolean canModify( int x, int y, Direction direction ) {
 		if( !isWall( x, y - 1 ) && direction != Direction.DOWN ) {
 			return false;
 		}
@@ -199,7 +199,7 @@ public class MazeMaker {
 		return true;
 	}
 
-	public boolean canBeEntranceExit( int x, int y ) {
+	private boolean canBeEntranceExit( int x, int y ) {
 		if( !isEdge( x, y ) || !isWall( x, y ) ) {
 			return false;
 		}
