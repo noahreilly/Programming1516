@@ -80,7 +80,10 @@ public class MazeMaker {
 		makePath( x, y );
 	}
 
-	private void makePath( int x, int y ) {
+	/*
+	 * Uses 2 unit squares to ensure that a contiguous path is created
+	 */
+	public void makePath( int x, int y ) {
 		LinkedHashSet<Direction> checkedSpots = new LinkedHashSet<Direction>();
 		while( checkedSpots.size() < 4 ) {
 			checkedSpots.add( directions[( int )( Math.random() * 4 )] );
@@ -89,55 +92,39 @@ public class MazeMaker {
 			pause();
 			switch ( dir ){
 				case UP:
-					if( check( x, y - 1, dir ) ) {
-						if( check( x, y - 2, dir ) ) {
-							maze[y - 1][x] = OPEN_LOCATION;
-							solver.modifyLocation( x, y - 1, OPEN_LOCATION );
-							maze[y - 2][x] = OPEN_LOCATION;
-							solver.modifyLocation( x, y - 2, OPEN_LOCATION );
-							makePath( x, y - 2 );
-						} else {
-							// makePath( x, y - 1 );
-						}
+					if( check( x, y - 2, dir ) ) {
+						maze[y - 1][x] = OPEN_LOCATION;
+						solver.modifyLocation( x, y - 1, OPEN_LOCATION );
+						maze[y - 2][x] = OPEN_LOCATION;
+						solver.modifyLocation( x, y - 2, OPEN_LOCATION );
+						makePath( x, y - 2 );
 					}
 					break;
 				case DOWN:
-					if( check( x, y + 1, dir ) ) {
-						if( check( x, y + 2, dir ) ) {
-							maze[y + 1][x] = OPEN_LOCATION;
-							solver.modifyLocation( x, y + 1, OPEN_LOCATION );
-							maze[y + 2][x] = OPEN_LOCATION;
-							solver.modifyLocation( x, y + 2, OPEN_LOCATION );
-							makePath( x, y + 2 );
-						} else {
-							// makePath( x, y + 1 );
-						}
+					if( check( x, y + 2, dir ) ) {
+						maze[y + 1][x] = OPEN_LOCATION;
+						solver.modifyLocation( x, y + 1, OPEN_LOCATION );
+						maze[y + 2][x] = OPEN_LOCATION;
+						solver.modifyLocation( x, y + 2, OPEN_LOCATION );
+						makePath( x, y + 2 );
 					}
 					break;
 				case LEFT:
-					if( check( x - 1, y, dir ) ) {
-						if( check( x - 2, y, dir ) ) {
-							maze[y][x - 1] = OPEN_LOCATION;
-							solver.modifyLocation( x - 1, y, OPEN_LOCATION );
-							maze[y][x - 2] = OPEN_LOCATION;
-							solver.modifyLocation( x - 2, y, OPEN_LOCATION );
-							makePath( x - 2, y );
-						} else {
-							// makePath( x - 1, y );
-						}
+					if( check( x - 2, y, dir ) ) {
+						maze[y][x - 1] = OPEN_LOCATION;
+						solver.modifyLocation( x - 1, y, OPEN_LOCATION );
+						maze[y][x - 2] = OPEN_LOCATION;
+						solver.modifyLocation( x - 2, y, OPEN_LOCATION );
+						makePath( x - 2, y );
 					}
 					break;
 				case RIGHT:
-					if( check( x + 1, y, dir ) ) {
-						if( check( x + 2, y, dir ) ) {
-							maze[y][x + 1] = OPEN_LOCATION;
-							solver.modifyLocation( x + 1, y, OPEN_LOCATION );
-							maze[y][x + 2] = OPEN_LOCATION;
-							solver.modifyLocation( x + 2, y, OPEN_LOCATION );
-							makePath( x + 2, y );
-						} else {
-							// makePath( x + 1, y );
-						}
+					if( check( x + 2, y, dir ) ) {
+						maze[y][x + 1] = OPEN_LOCATION;
+						solver.modifyLocation( x + 1, y, OPEN_LOCATION );
+						maze[y][x + 2] = OPEN_LOCATION;
+						solver.modifyLocation( x + 2, y, OPEN_LOCATION );
+						makePath( x + 2, y );
 					}
 					break;
 			}
@@ -225,7 +212,7 @@ public class MazeMaker {
 		}
 		return true;
 	}
-	
+
 	public void pause() {
 		try {
 			TimeUnit.MILLISECONDS.sleep( TIME );
